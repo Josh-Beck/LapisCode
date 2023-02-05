@@ -1,0 +1,21 @@
+{
+  "name": "lapiscode",
+  "version": "alpha",
+  "description": "Lapis Code is an API security library designed to parse Lambda API code and associated infrastructure and find common vulnerabilities.",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lapis" : "npx tsc && node build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josh-Beck/LapisCode.git"
+  },
+  "keywords": [],
+  "author": "Joshua Beck",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/Josh-Beck/LapisCode/issues"
+  },
+  "homepage": "https://github.com/Josh-Beck/LapisCode#readme"
+}
