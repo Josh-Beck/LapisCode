@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lapis" : "npx tsc && node build/index.js"
+    "lapis": "npx tsc && node build/index.js"
   },
   "repository": {
     "type": "git",
@@ -17,5 +17,10 @@
   "bugs": {
     "url": "https://github.com/Josh-Beck/LapisCode/issues"
   },
-  "homepage": "https://github.com/Josh-Beck/LapisCode#readme"
+  "homepage": "https://github.com/Josh-Beck/LapisCode#readme",
+  "dependencies": {
+    "@types/node": "^18.11.19",
+    "js-hcl-parser": "^1.0.1",
+    "typescript": "^4.9.5"
+  }
 }
