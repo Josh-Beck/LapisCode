@@ -1,8 +1,10 @@
 import * as conf from './config/defaultConfig.json';
 import { splitGithubURL, githubContents } from "./githubService";
 
+//console.log("Here");
 
-(async (): Promise<void> => {
+
+export async function mapRepo(): Promise<string> {
     let urlArr: string[] = splitGithubURL(conf.githubUrl);
 
     interface GithubFile {
@@ -11,27 +13,30 @@ import { splitGithubURL, githubContents } from "./githubService";
         url: string,
         type: string
     }
-    
+
     console.log(urlArr)
-    
+
     console.log("before");
-    let repoMapString: string = await githubContents(urlArr[0],urlArr[1],"");
-    let repoMapJson = JSON.parse(repoMapString);
+
+    let repoMapJson: GithubFile[] = await githubContents(urlArr[0],urlArr[1],"");
+   //let repoMapJson = JSON.parse(repoMapString);
+
+    console.log(repoMapJson[0].name)
     console.log("after");   
 
     var repoMap: GithubFile[] = [];
 
-    console.log(repoMapJson.length)
+    // console.log(repoMapJson.length)
 
-    for (let i = 0; i < repoMapJson.length; i++) {
-        let repo: GithubFile = {
-            name: repoMapJson[i].name,
-            path: repoMapJson[i].path,
-            url: repoMapJson[i].url,
-            type: repoMapJson[i].type
-        }
-        repoMap.push(repo);    
-    }
+    // for (let i = 0; i < repoMapJson.length; i++) {
+    //     let repo: GithubFile = {
+    //         name: repoMapJson[i].name,
+    //         path: repoMapJson[i].path,
+    //         url: repoMapJson[i].url,
+    //         type: repoMapJson[i].type
+    //     }
+    //     repoMap.push(repo);    
+    // }
 
 
 
@@ -46,5 +51,9 @@ import { splitGithubURL, githubContents } from "./githubService";
 
 
 
-    console.log(repoMap)
-})
+    console.log("End of function " + repoMap)
+    return JSON.stringify(repoMap);
+} 
+
+
+
