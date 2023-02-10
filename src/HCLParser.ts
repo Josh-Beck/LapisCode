@@ -1,26 +1,38 @@
+import { GithubNode } from "./types/GithubNode";
+import {githubFetch } from "./githubService";
+
 var HCLParser = require("js-hcl-parser")
 
+
 // Takes in HCL string, parses out something...
-function parse(input: string): string {
-    HCLParser.parse(input);
+export async function parseTerrformHCL(terraformNode: GithubNode): Promise<string> {
+    console.log("HERE!")
+    console.log(terraformNode)
+    if(terraformNode.type === "dir") {
+        // Figure out how to do this with dirs
+    } else {
+        let x:string = await githubFetch(terraformNode.url);
+    }
+    //HCLParser.parse(input);
     return "x";
 }
 
 
 
+
 const hclInput = `
 scale {
-  from = 72
-  to = 24
+    from = 72
+    to = 24
 }
 `
  
 const jsonInput = `
 {
-  "scale": {
+"scale": {
     "from": 72,
     "to": 8
-  }
+}
 }
 `
 var x = HCLParser.parse(hclInput);

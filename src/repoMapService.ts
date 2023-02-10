@@ -1,59 +1,33 @@
 import * as conf from './config/defaultConfig.json';
-import { splitGithubURL, githubContents } from "./githubService";
+import { getGithubOrgAndRepoFromURL, githubContents, githubFetch } from "./githubService";
+import { GithubNode } from "./types/GithubNode";
 
-//console.log("Here");
-
-
-export async function mapRepo(): Promise<string> {
-    let urlArr: string[] = splitGithubURL(conf.githubUrl);
-
-    interface GithubFile {
-        name: string,
-        path: string,
-        url: string,
-        type: string
-    }
-
-    console.log(urlArr)
-
-    console.log("before");
-
-    let repoMapJson: GithubFile[] = await githubContents(urlArr[0],urlArr[1],"");
-   //let repoMapJson = JSON.parse(repoMapString);
-
-    console.log(repoMapJson[0].name)
-    console.log("after");   
-
-    var repoMap: GithubFile[] = [];
-
-    // console.log(repoMapJson.length)
-
-    // for (let i = 0; i < repoMapJson.length; i++) {
-    //     let repo: GithubFile = {
-    //         name: repoMapJson[i].name,
-    //         path: repoMapJson[i].path,
-    //         url: repoMapJson[i].url,
-    //         type: repoMapJson[i].type
-    //     }
-    //     repoMap.push(repo);    
-    // }
-
-
-
-// JSON.parse(repoMapJson).then((json) =>{
-//     repoMap = {
-//         name: json.name,
-//         path: json.path,
-//         url: json.url,
-//         type: json.type
-//     }
-// })
-
-
-
-    console.log("End of function " + repoMap)
-    return JSON.stringify(repoMap);
+export async function getTerrformNode(): Promise<GithubNode> {
+    let urlArr: string[] = getGithubOrgAndRepoFromURL(conf.githubUrl);
+    let mainTerraformFile: GithubNode = await parseRepoForTerraform(urlArr[0],urlArr[1],"","",0);
+    return mainTerraformFile;
 } 
 
+//Recursive function to find Terraform folder or file
+async function parseRepoForTerraform(org: string, repo: string, path: string, url: string, recurions: number): Promise<GithubNode> {
+    if(recurions > conf.recursionMaximum) {
+        return null as any;
+    }
 
+    let repoArrJson: GithubNode[] = url ? await githubFetch<GithubNode[]>(url) : await githubContents(org, repo, path);
+    for (let i = 0; i < repoArrJson.length; i++) {
+        console.log("Name " + repoArrJson[i].name)
+        if (conf.TerraformFileNames.includes(repoArrJson[i].name)){// || conf.TerraformDirectoryNames.includes(repoArrJson[i].name)){
+            console.log("Found Terraform element: " + repoArrJson[i].name + ". Type: " + repoArrJson[i].type);
+            return repoArrJson[i];
+        }
+        if (repoArrJson[i].type === "dir") {
+            let returnFile: GithubNode = await parseRepoForTerraform(org,repo,path,repoArrJson[i].url,recurions + 1);
+            if (returnFile) {
+                return returnFile;
+            }
+        }
+    }
+    return null as any;
+}
 

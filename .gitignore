@@ -106,3 +106,6 @@ dist
 
 #ignore secrets file
 src/secrets/secrets.json
+
+#ignore vscode config
+.vscode
