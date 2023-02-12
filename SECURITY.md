@@ -10,4 +10,4 @@
 
 Use this section to tell people how to report a vulnerability.
 
-Please email `JoshuaThomasBeck@gmail.com` or add a PR to remediate found vulnerability.
+Please email `BeckJoshua@JohnDeere.com` or add a PR to remediate found vulnerability.
