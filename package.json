@@ -20,6 +20,8 @@
   "homepage": "https://github.com/Josh-Beck/LapisCode#readme",
   "dependencies": {
     "@types/node": "^18.11.19",
+    "acorn": "^8.8.2",
+    "commander": "^10.0.0",
     "js-hcl-parser": "^1.0.1",
     "typescript": "^4.9.5"
   }

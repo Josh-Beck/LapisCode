@@ -5,5 +5,6 @@ export interface GithubContentNode {
     url: string,
     download_url: string,
     content: string,
+    sha:string,
     encoding: string
 }
