@@ -46,7 +46,6 @@ export const FILE_NODE_PARSING:string[] = [
     JSConst.VAR_DECLARATION,
     JSConst.FUNC_DECLARATION,
     JSConst.FUNC_EXPR,
-    //JSConst.ASSIGNMENT_EXPR - Non recursive
     JSConst.CALL_EXPR,
     JSConst.IF_STATEMENT
 ]
@@ -61,10 +60,11 @@ export function returnCriteriaFunction(obj:any):Boolean {
 }
 
 export function recursionBaseFunction(obj:any):FileNode {
-    console.log("")
-    console.log(obj)
+    //console.log("")
+    //console.log(obj)
 
     //TODO NewExpression
+    //TODO ObjectExpression
     try {
         switch(obj.type) { 
             case JSConst.VAR_DECLARATION: { 
@@ -175,26 +175,6 @@ export function recursionBaseFunction(obj:any):FileNode {
 }
 
 function valuesAndArgsHelper(obj:any):FileNode[]{
-    console.log("THE CALL")
-    console.log(obj)
-    //TODO works for member expressions and idenfiers, but misses regex Literals
-    //TODO handle individual file nodes vs an array of file nodes.
-    /*
-    example, 
-
-    NEW HELPER
-    THE CALL
-    Node { type: 'Identifier', start: 728, end: 732, name: 'data' }
-    THE CALL
-    Node { type: 'Identifier', start: 734, end: 737, name: 'key' }
-    THE CALL
-    Node { type: 'Identifier', start: 739, end: 745, name: 'bucket' }
-    [
-    [ Ident { name: 'data', type: 'Identifier' } ],
-    [ Ident { name: 'key', type: 'Identifier' } ],
-    [ Ident { name: 'bucket', type: 'Identifier' } ]
-    ]
-    */
     let nodeArr:FileNode[] = [];
     if(obj.type === JSConst.MEMBER_EXPR){
         if(obj.object) {
