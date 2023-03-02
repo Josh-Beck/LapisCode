@@ -1,10 +1,6 @@
 import * as conf from './config/defaultConfig.json';
 
 export function recurseObject<T>(obj: any, returnCriteria:(checkObj:any) => Boolean, returnFunc:(funcObj:any) => T, returnArr:T[], maxRecursions: number):T[] {
-
-    console.log("")
-    console.log(obj)
-    console.log("")
     if (maxRecursions > conf.recursionMaximum){
         throw new Error("Recursion has reached maximum depth.");
     }
@@ -13,8 +9,9 @@ export function recurseObject<T>(obj: any, returnCriteria:(checkObj:any) => Bool
         returnArr.push(returnFunc(obj));
     }
 
-    // Base case, JSON object lowest result is of type string.
-    if(typeof (obj) !== 'string'){
+    // Base case, primitive types are ignored
+    if(obj === Object(obj)) {
+        //console.log(obj)
         for(var i in obj) {
             //Either object or array index
             if(typeof (i) === 'object') {

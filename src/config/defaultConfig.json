@@ -2,5 +2,5 @@
     "githubUrl": "https://github.com/Josh-Beck/LapisCode-Test-Code",
     "TerraformFileNames" : ["main.tf","lambda.tf","gateway.tf"],
     "TerraformDirectoryNames" : ["terraform","Terraform"],
-    "recursionMaximum": 20
+    "recursionMaximum": 30
 }

@@ -1,26 +1,33 @@
-import { CalledFunction } from "./CalledFunction";
-import { Variable } from "./Variable";
+import { FileNode } from "./FileNode";
 
-export class Conditional {
-    vars?: Variable[];
-    functions?: CalledFunction[];
-    comparisonOperators?: ComparisionOperator[];
-    logicalOperator?: LogicalOperator[];
-    constructor(){}
+export class Conditional implements FileNode {
+    name:string;
+    type:string;
+    //vars?: string[];
+    //functions?: string[];
+    args:Array<Array<FileNode>> = [];
+    comparisonOperators: ComparisionOperator[] = [];
+    logicalOperators: LogicalOperator[] = [];
+    constructor(name:string, type:string){
+        this.name = name;
+        this.type = type;
+    }
 }
 
 export enum ComparisionOperator {
-    LT = 0,
-    LTE,
-    GT,
-    GTE,
-    EQ,
-    NEQ,
-    IN
+    LT = '<',
+    LTE = '<=',
+    GT = '>',
+    GTE = '>=',
+    EQ2 = '==',
+    EQ = '===',
+    NEQ2 = '!=',
+    NEQ = '!=='
 }
 
 export enum LogicalOperator {
-    AND = 0,
-    OR,
-    BOOL
+    AND = "&&",
+    OR = "||",
+    NOT = "!",
+    BOOL = "BOOL"
 }

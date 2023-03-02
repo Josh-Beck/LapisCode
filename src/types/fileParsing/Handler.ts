@@ -1,11 +1,9 @@
 import { FileNode } from "./FileNode";
-import { Variable } from "./Variable";
 
-export class DefinedVariable implements FileNode {
+export class Handler implements FileNode {
     name: string;
     type: string;
     kind: string;
-    init?:string[];
 
     constructor(name: string, type: string, kind: string){
         this.name = name;

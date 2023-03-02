@@ -1,6 +1,6 @@
-import { Variable } from "./Variable";
-import { DefinedFunction } from "./DefinedFunction";
-import { CalledFunction } from "./CalledFunction";
+import { Variable } from "./variable/Variable";
+import { DefinedFunction } from "./function/DefinedFunction";
+import { CalledFunction } from "./function/CalledFunction";
 import { Conditional } from "./Conditional";
 
 export interface ParsedFile {
