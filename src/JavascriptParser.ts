@@ -45,6 +45,7 @@ export async function parseJSFile(fileContentNode:GithubContentNode):Promise<Obj
 export const FILE_NODE_PARSING:string[] = [
     JSConst.VAR_DECLARATION,
     JSConst.FUNC_DECLARATION,
+    JSConst.ARROW_FUNCTION,
     JSConst.FUNC_EXPR,
     JSConst.CALL_EXPR,
     JSConst.IF_STATEMENT
@@ -74,8 +75,8 @@ export function recursionBaseFunction(obj:any):FileNode {
                 if(obj.declarations[0].init && obj.declarations[0].init.type === JSConst.MEMBER_EXPR) {
                     defVar.init.push(valuesAndArgsHelper(obj.declarations[0].init));
                 } else if(obj.declarations[0].init) {
-                    console.log("FUNCITON BASE")
-                    console.log(obj.declarations[0].init)
+                    //console.log("FUNCITON BASE")
+                    //console.log(obj.declarations[0].init)
                     let initFunc:Function = recursionBaseFunction(obj.declarations[0].init);
                     defVar.init.push([initFunc]);
                 }
@@ -87,11 +88,16 @@ export function recursionBaseFunction(obj:any):FileNode {
             case JSConst.ARROW_FUNCTION:
             case JSConst.FUNC_EXPR:
             case JSConst.FUNC_DECLARATION: { 
+                //console.log("INSIDE FUNCTION!")
                 let paramNames:Array<Array<FileNode>> = []
                 let superNames:Array<FileNode> = [];
-                let name:string = "MISSING_IMPLEMENTATION_FOR_FUNCTION_NAME";
-                if(obj.params && obj.params.length > 0){
-                    paramNames.push(obj.params.map((a:any) => valuesAndArgsHelper(a)));
+                let name:string = "";
+                if(obj.params && obj.params.length > 0) {
+                    //console.log("PARAMS FUNC");
+                    //console.log(obj.params)
+                    obj.params.forEach((a:any) => {
+                        paramNames.push(valuesAndArgsHelper(a));
+                    });
                 }
                 if(obj.id) {
                     superNames = valuesAndArgsHelper(obj.id.object); 
@@ -99,6 +105,7 @@ export function recursionBaseFunction(obj:any):FileNode {
                 }
                 let defFunc: DefinedFunction = new DefinedFunction(name,obj.type,paramNames);
                 defFunc.super = superNames;
+                console.log(defFunc)
                 return defFunc;
             }
             case JSConst.CALL_EXPR: {
@@ -117,8 +124,8 @@ export function recursionBaseFunction(obj:any):FileNode {
                         }                    
                     }
                 }
-                console.log("CALLEEE")
-                console.log(callee)
+                //console.log("CALLEEE")
+                //console.log(callee)
                 let calledFunc: CalledFunction = new CalledFunction(callee.slice(-1)[0].name,obj.type,args);
                 if(callee.length > 1) {
                     calledFunc.super = callee.slice(0,-1);
@@ -134,9 +141,9 @@ export function recursionBaseFunction(obj:any):FileNode {
                 return lit;
             }
             case JSConst.IF_STATEMENT: {
-                console.log("IF STATEMENT")
-                console.log(obj.test);
-                console.log(obj.consequent)
+                //console.log("IF STATEMENT")
+                //console.log(obj.test);
+                //console.log(obj.consequent)
                 let cond:Conditional = null as any;
 
                 if(obj.test && obj.test.type === JSConst.LOGICAL_EXPR) {

@@ -1,6 +1,7 @@
 import * as conf from './config/defaultConfig.json';
 
 export function recurseObject<T>(obj: any, returnCriteria:(checkObj:any) => Boolean, returnFunc:(funcObj:any) => T, returnArr:T[], maxRecursions: number):T[] {
+
     if (maxRecursions > conf.recursionMaximum){
         throw new Error("Recursion has reached maximum depth.");
     }

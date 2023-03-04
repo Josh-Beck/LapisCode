@@ -4,7 +4,7 @@ import { parseTerrformHCL } from "./HCLParser";
 import { LambdaFunctionTerraform } from "./types/TerraformLambdaFunction";
 import { getGithubFileFromWebsiteURL, getGithubFileNames } from "./GithubService";
 //import { getPythonFile, parsePythonFile } from "./PythonService";
-import { prepVulnerabilityData } from "./vulnerabilities/VulnerabilityService";
+import { prepVulnerabilityData, scan } from "./vulnerabilities/VulnerabilityService";
 import { handleJSFile } from "./JavascriptParser";
 import { GithubContentNode } from "./types/GithubContentNode";
 import { FileNode } from "./types/fileParsing/FileNode";
@@ -40,14 +40,16 @@ async function main(options: any) {
     console.log(lambdaFunctionTerraformList);
 
     let parsedAndPreppedJSFile:FileNode[] = await handleJSFile(options.handler);
-    console.log("RESULTS")
-    console.log(parsedAndPreppedJSFile)
+    //console.log("RESULTS")
+    //console.log(parsedAndPreppedJSFile)
     var fs = require('fs');
-    fs.writeFile ("./build/buildResults.json", JSON.stringify(parsedAndPreppedJSFile), function(err:any) {
+    await fs.writeFile ("./build/javascriptFileBuildResults.json", JSON.stringify(parsedAndPreppedJSFile), function(err:any) {
         if (err) throw err;
             console.log('complete');
         }
     );
+
+    let finished:boolean = scan(parsedAndPreppedJSFile);
 
     //Handle finding/fetching python handler file
     // let pythonFile:GithubNode = await getGithubFileFromWebsiteURL(options.handler);
