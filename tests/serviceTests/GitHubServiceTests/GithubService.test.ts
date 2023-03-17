@@ -1,9 +1,9 @@
 import {describe, expect, test} from '@jest/globals';
+import { resourceLimits } from 'worker_threads';
 import * as GithubService from '../../../src/services/GithubService';
 import { GithubContentNode } from '../../../src/types/GithubContentNode';
 
 describe('GitHub Service Tests', () => {
-  
     test('GitHub Contents URL Builder', () => {
         expect(GithubService.githubContentsURLBuilder("x","y","z"))
         .toBe("https://api.github.com/repos/x/y/contents/z");
@@ -14,5 +14,12 @@ describe('GitHub Service Tests', () => {
         
         expect(data.name).toBe("GithubFetchTest.md");
         expect(data.path).toBe('unitTests/GithubService/GithubFetchTest.md');
+    });
+
+    test('GitHub Org and Repo from URL ', () => {
+        let result:string[] = GithubService.getGithubOrgAndRepoFromURL("https://github.com/Josh-Beck/LapisCode/tree/main");
+
+        expect(result[0]).toBe("Josh-Beck");
+        expect(result[1]).toBe("LapisCode");
     });
 }); 

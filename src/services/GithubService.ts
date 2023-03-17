@@ -31,7 +31,7 @@ export async function githubFetch<T>(url: string): Promise<T> {
 }
 
 export function getGithubOrgAndRepoFromURL(url: string): string[] {
-    let urlArr: string[] = conf.githubUrl.split("/");
+    let urlArr: string[] = url ? url.split("/") : conf.githubUrl.split("/");
     let org: string = urlArr[3];
     let repo: string = urlArr[4];
     return [org,repo]
