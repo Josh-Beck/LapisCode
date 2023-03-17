@@ -19,10 +19,8 @@ let parsedAndPreppedJSFile:FileNode[] = [];
 
 export async function handleJSFile(url: string):Promise<FileNode[]> {
     let jsFileContents:GithubContentNode = await getJSFile(url);
-    //console.log(jsFileContents);
-
     let parsedJSFile:Object = await parseJSFile(jsFileContents);
-    //console.log(parsedJSFile);
+
     recurseObject<FileNode>(parsedJSFile, returnCriteriaFunction, recursionBaseFunction, 0);
     return parsedAndPreppedJSFile;
 }
@@ -37,10 +35,7 @@ export async function getJSFile(url: string): Promise<GithubContentNode> {
 
 export async function parseJSFile(fileContentNode:GithubContentNode):Promise<Object> {
     let jsFile: string = decode(fileContentNode.content);
-    //console.log(jsFile)
-
     let parsedJSFile:Object = acorn.parse(jsFile, {ecmaVersion: 2020});
-
     return parsedJSFile;
 }
 
@@ -63,42 +58,33 @@ export function returnCriteriaFunction(obj:any):Boolean {
 }
 
 export function recursionBaseFunction(obj:any) {
-    //console.log("")
-    //console.log(obj)
-
     //TODO NewExpression
+    //https://github.com/Josh-Beck/LapisCode/issues/13
+
     //TODO ObjectExpression
+    //https://github.com/Josh-Beck/LapisCode/issues/12
     try {
         switch(obj.type) { 
             case JSConst.VAR_DECLARATION: { 
-                console.log(obj.declarations[0])
                 let defVar:DefinedVariable = new DefinedVariable(obj.declarations[0].id.name,obj.type,obj.kind);
 
                 if(obj.declarations[0].init && obj.declarations[0].init.type === JSConst.MEMBER_EXPR) {
                     defVar.init.push(valuesAndArgsHelper(obj.declarations[0].init));
                 } else if(obj.declarations[0].init) {
-                    console.log("VARIABLE DECLARATION FUNCITON BASE")
-                    //console.log(obj.declarations[0].init)
-                    //This no longer works due to the recursion change
                     let initFunc:Function = recursionBaseFunction(obj.declarations[0].init);
                     defVar.init.push([initFunc]);
                 }
 
-                // IF DECLARATION EQUALS CALLED FUNCTION - CALLED FUNCTION NAME AND MAP TO FUNCTION
-                
                 parsedAndPreppedJSFile.push(defVar);
                 return defVar;
             } 
             case JSConst.ARROW_FUNCTION:
             case JSConst.FUNC_EXPR:
             case JSConst.FUNC_DECLARATION: { 
-                //console.log("INSIDE FUNCTION!")
                 let paramNames:Array<Array<FileNode>> = []
                 let superNames:Array<FileNode> = [];
                 let name:string = "";
                 if(obj.params && obj.params.length > 0) {
-                    //console.log("PARAMS FUNC");
-                    //console.log(obj.params)
                     obj.params.forEach((a:any) => {
                         paramNames.push(valuesAndArgsHelper(a));
                     });
@@ -109,18 +95,14 @@ export function recursionBaseFunction(obj:any) {
                 }
                 let defFunc: DefinedFunction = new DefinedFunction(name,obj.type,paramNames);
                 defFunc.super = superNames;
-                console.log(defFunc)
                 parsedAndPreppedJSFile.push(defFunc);
                 return defFunc;
             }
             case JSConst.CALL_EXPR: {
-                console.log("CALL ExpRESIONS")
-                console.log(obj)
                 let callee:FileNode[] = valuesAndArgsHelper(obj.callee)
                 let args:Array<Array<FileNode>> = []
 
                 for(let i:number = 0; i < obj.arguments.length; i++) {
-                    console.log(obj.arguments[i])
                     if(obj.arguments[i].type === JSConst.MEMBER_EXPR 
                         || obj.arguments[i].type === JSConst.IDENTIFIER 
                         || obj.arguments[i].type === JSConst.LITERAL) {
@@ -132,8 +114,6 @@ export function recursionBaseFunction(obj:any) {
                         }                    
                     }
                 }
-                //console.log("CALLEEE")
-                //console.log(callee)
                 let calledFunc: CalledFunction = new CalledFunction(callee.slice(-1)[0].name,obj.type,args);
                 if(callee.length > 1) {
                     calledFunc.super = callee.slice(0,-1);
@@ -151,9 +131,6 @@ export function recursionBaseFunction(obj:any) {
                 return lit;
             }
             case JSConst.IF_STATEMENT: {
-                //console.log("IF STATEMENT")
-                //console.log(obj.test);
-                //console.log(obj.consequent)
                 let cond:Conditional = null as any;
 
                 if(obj.test && obj.test.type === JSConst.LOGICAL_EXPR) {
@@ -239,8 +216,6 @@ function handleAssignmentExpr(obj:any) {
             if(left.object){
                 right.id.object = left.object;
             }
-            console.log("ASSIGNEMENT ");
-            console.log(obj);
         }
     }
 }

@@ -7,11 +7,11 @@ export function githubContentsURLBuilder(org: string, repo: string, path: string
 }
 
 // TODO For future, change repo parser to use trees
+// https://github.com/Josh-Beck/LapisCode/issues/10
 export async function getGithubFileNames(): Promise<string[]> {
     let url: string = "https://api.github.com/repos/Josh-Beck/LapisCode/git/trees/main?recursive=3";
     let x: Object = await githubFetch<Object>(url);
-    console.log(x);
-    // List of file names (ideally)
+    // List of file names or filenode objects (ideally)
     return [""];
 }
 
@@ -25,7 +25,7 @@ export async function githubFetch<T>(url: string): Promise<T> {
     }).then((resp) => resp.json()).then((data) => {
         return data;
     }).catch(function(error) {
-        console.log("error "+error);
+        console.log("error "+ error);
         return "{}";
     });
 }

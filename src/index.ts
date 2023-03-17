@@ -2,25 +2,21 @@ import { getTerrformNode } from "./RepoMapService";
 import { GithubNode } from "./types/GithubNode";
 import { parseTerrformHCL } from "./HCLParser";
 import { LambdaFunctionTerraform } from "./types/TerraformLambdaFunction";
-import { getGithubFileFromWebsiteURL, getGithubFileNames } from "./GithubService";
-//import { getPythonFile, parsePythonFile } from "./PythonService";
-import { prepVulnerabilityData, scan } from "./vulnerabilities/VulnerabilityService";
+import { scan } from "./vulnerabilities/VulnerabilityService";
 import { handleJSFile } from "./JavascriptParser";
-import { GithubContentNode } from "./types/GithubContentNode";
 import { FileNode } from "./types/fileParsing/FileNode";
 const { Command } = require('commander');
 
 (async (): Promise<void> => {
-    // Top level async import statements
-
     var cli = new Command();
 
     cli.name("Lapis").description("Lambda API Security");
 
     cli.command('scan').description('Submit a basic scan.')
-    .option('-u, --url', 'Base Github URL. Defaults to configuration file URL.')
+    .option('-u, --url <string>', 'Base Github URL. Defaults to configuration file URL.')
     .option('-t, --terraform <string>' , 'Terraform main.tf file URL.')
-    .option('--handler <string>' , 'Python lambda handler file URL.')
+    .option('--handler <string>' , 'Lambda handler file URL.')
+    // https://github.com/Josh-Beck/LapisCode/issues/7
     //.option('-a, --auth <string>', 'Python gateway authorizer file')
     .action((options: any) => {
         main(options);

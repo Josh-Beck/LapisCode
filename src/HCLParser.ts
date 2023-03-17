@@ -1,5 +1,3 @@
-import * as conf from './config/defaultConfig.json';
-
 import { GithubNode } from "./types/GithubNode";
 import { githubFetch } from "./GithubService";
 import { decode } from "./utils/Utils";
@@ -7,7 +5,6 @@ import { GithubContentNode } from "./types/GithubContentNode";
 import { LambdaFunctionObject, LambdaFunctionTerraform } from "./types/TerraformLambdaFunction";
 import { recurseObject } from './RecursiveService';
 var HCLParser = require("js-hcl-parser")
-
 
 //Global variable for use in recursive function
 let terraformObjectList: LambdaFunctionTerraform[] = [];
@@ -17,11 +14,11 @@ export async function parseTerrformHCL(terraformNode: GithubNode): Promise<Lambd
     let terraformFile:GithubContentNode;
 
     //TODO create alternate methodology for handling directories. 
+    //https://github.com/Josh-Beck/LapisCode/issues/2
     // if(terraformNode.type === "dir") {
-    //     // Figure out how to do this with dirs
-    //     //terraformFile = {"content":"hey"};
+    //     //terraformFile = ...
     // } else {
-        terraformFile = await githubFetch<GithubContentNode>(terraformNode.url);
+    terraformFile = await githubFetch<GithubContentNode>(terraformNode.url);
     // }
 
     let terraformJSON = HCLToJSON(terraformFile.content, true);
@@ -47,8 +44,6 @@ function createTerraformObjects(obj: any) {
 function returnCriteriaForTerraform(obj:any):Boolean {
     return Object.keys(obj).includes("aws_lambda_function");
 }
-
-
 
 function HCLToJSON(str: string, base64Encoded?: Boolean) {
     return JSON.parse(HCLParser.parse(base64Encoded ? decode(str) : str));

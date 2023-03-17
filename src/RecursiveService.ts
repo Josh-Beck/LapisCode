@@ -24,7 +24,6 @@ export function recurseObject<T>(obj: any, returnCriteria: (checkObj: any) => Bo
     }
 }
 
-
 export function recurseFileNodeList(nodeList: FileNode[], returnCriteria: (checkObj: FileNode) => Boolean, returnFunc: (funcObj: FileNode) => void, maxRecursions: number) {
 
     if (recursionMaximumCheck(maxRecursions)) throw new Error("Recursion has reached maximum depth.");
