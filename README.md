@@ -1,7 +1,7 @@
 # Lambda API Security 
 
 ![GitHub](https://img.shields.io/github/license/Josh-Beck/LapisCode?color=green&style=for-the-badge)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/Josh-Beck/LapisCode?style=for-the-badge)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Josh-Beck/LapisCode?include_prereleases&style=for-the-badge)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Josh-Beck/LapisCode?logo=github&style=for-the-badge)
 
 
