@@ -1,18 +1,18 @@
-import { GithubNode } from "./types/GithubNode";
-import { GithubContentNode } from "./types/GithubContentNode";
-import { githubFetch,getGithubFileFromWebsiteURL } from "./GithubService";
-import { decode } from "./utils/Utils";
-import { FileNode } from "./types/fileParsing/FileNode";
-import { recurseObject } from "./RecursiveService";
+import { GithubNode } from "../types/GithubNode";
+import { GithubContentNode } from "../types/GithubContentNode";
+import { githubFetch,getGithubFileFromWebsiteURL } from "../services/GithubService";
+import { decode } from "../utils/Utils";
+import { FileNode } from "../types/fileParsing/FileNode";
+import { recurseObject } from "../services/RecursiveService";
 import * as acorn from "acorn";
-import { DefinedVariable } from "./types/fileParsing/variable/DefinedVariable";
-import * as JSConst from "./constants/javascriptConstants"
-import { DefinedFunction } from "./types/fileParsing/function/DefinedFunction";
-import { CalledFunction } from "./types/fileParsing/function/CalledFunction";
-import { Literal } from "./types/fileParsing/Literal";
-import { Function } from "./types/fileParsing/function/Function";
-import { ComparisionOperator, Conditional, LogicalOperator } from "./types/fileParsing/Conditional";
-import { Ident } from "./types/fileParsing/Ident";
+import { DefinedVariable } from "../types/fileParsing/variable/DefinedVariable";
+import * as JSConst from "../constants/javascriptConstants"
+import { DefinedFunction } from "../types/fileParsing/function/DefinedFunction";
+import { CalledFunction } from "../types/fileParsing/function/CalledFunction";
+import { Literal } from "../types/fileParsing/Literal";
+import { Function } from "../types/fileParsing/function/Function";
+import { ComparisionOperator, Conditional, LogicalOperator } from "../types/fileParsing/Conditional";
+import { Ident } from "../types/fileParsing/Ident";
 
 //Global variable for use in recursive function
 let parsedAndPreppedJSFile:FileNode[] = [];

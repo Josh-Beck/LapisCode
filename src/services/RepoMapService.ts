@@ -1,6 +1,6 @@
-import * as conf from './config/defaultConfig.json';
+import * as conf from '../config/defaultConfig.json';
 import { getGithubOrgAndRepoFromURL, githubContentsURLBuilder, githubFetch } from "./GithubService";
-import { GithubNode } from "./types/GithubNode";
+import { GithubNode } from "../types/GithubNode";
 
 export async function getTerrformNode(githubBaseURLInput: string, terraformFileURLInput: string ): Promise<GithubNode> {
     if(terraformFileURLInput) {

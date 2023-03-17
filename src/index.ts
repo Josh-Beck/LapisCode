@@ -1,9 +1,9 @@
-import { getTerrformNode } from "./RepoMapService";
+import { getTerrformNode } from "./services/RepoMapService";
 import { GithubNode } from "./types/GithubNode";
-import { parseTerrformHCL } from "./HCLParser";
+import { parseTerrformHCL } from "./parsers/HCLParser";
 import { LambdaFunctionTerraform } from "./types/TerraformLambdaFunction";
 import { scan } from "./vulnerabilities/VulnerabilityService";
-import { handleJSFile } from "./JavascriptParser";
+import { handleJSFile } from "./parsers/JavascriptParser";
 import { FileNode } from "./types/fileParsing/FileNode";
 const { Command } = require('commander');
 

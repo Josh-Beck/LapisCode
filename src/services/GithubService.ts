@@ -1,6 +1,6 @@
-import * as conf from './config/defaultConfig.json';
-import * as secrets from './secrets/secrets.json';
-import { GithubNode } from "./types/GithubNode";
+import * as conf from '../config/defaultConfig.json';
+import * as secrets from '../secrets/secrets.json';
+import { GithubNode } from "../types/GithubNode";
 
 export function githubContentsURLBuilder(org: string, repo: string, path: string): string {
     return "https://api.github.com/repos/"+org+"/"+repo+"/contents/"+ path;

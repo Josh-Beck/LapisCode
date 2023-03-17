@@ -1,8 +1,8 @@
-import * as conf from './config/defaultConfig.json';
-import { FileNode } from './types/fileParsing/FileNode';
-import { CalledFunction } from './types/fileParsing/function/CalledFunction';
-import { DefinedFunction } from './types/fileParsing/function/DefinedFunction';
-import { Function } from './types/fileParsing/function/Function';
+import * as conf from '../config/defaultConfig.json';
+import { FileNode } from '../types/fileParsing/FileNode';
+import { CalledFunction } from '../types/fileParsing/function/CalledFunction';
+import { DefinedFunction } from '../types/fileParsing/function/DefinedFunction';
+import { Function } from '../types/fileParsing/function/Function';
 
 export function recurseObject<T>(obj: any, returnCriteria: (checkObj: any) => Boolean, returnFunc: (funcObj: any) => void, maxRecursions: number): void {
 
@@ -12,7 +12,6 @@ export function recurseObject<T>(obj: any, returnCriteria: (checkObj: any) => Bo
 
     // Base case, primitive types are ignored
     if (obj === Object(obj)) {
-        //console.log(obj)
         for (var i in obj) {
             //Either object or array index
             if (typeof (i) === 'object') {

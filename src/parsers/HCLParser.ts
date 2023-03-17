@@ -1,9 +1,9 @@
-import { GithubNode } from "./types/GithubNode";
-import { githubFetch } from "./GithubService";
-import { decode } from "./utils/Utils";
-import { GithubContentNode } from "./types/GithubContentNode";
-import { LambdaFunctionObject, LambdaFunctionTerraform } from "./types/TerraformLambdaFunction";
-import { recurseObject } from './RecursiveService';
+import { GithubNode } from "../types/GithubNode";
+import { githubFetch } from "../services/GithubService";
+import { decode } from "../utils/Utils";
+import { GithubContentNode } from "../types/GithubContentNode";
+import { LambdaFunctionObject, LambdaFunctionTerraform } from "../types/TerraformLambdaFunction";
+import { recurseObject } from '../services/RecursiveService';
 var HCLParser = require("js-hcl-parser")
 
 //Global variable for use in recursive function
