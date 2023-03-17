@@ -48,7 +48,7 @@ async function main(options: any) {
             console.log('complete');
         }
     );
-
+    console.log(parsedAndPreppedJSFile)
     let finished:boolean = scan(parsedAndPreppedJSFile);
 
     //Handle finding/fetching python handler file

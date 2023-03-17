@@ -1,9 +1,12 @@
 export class TreeNode<T> {
+    name:string;
     value:T;
-    children:TreeNode<T>[]; 
-    constructor(value:T) {
-      this.value = value;
-      this.children = [];
+    parent?:T;
+    children:TreeNode<T>[];
+    constructor(name:string, value:T) {
+        this.name = name;
+        this.value = value;
+        this.children = [];
     }
   }
   

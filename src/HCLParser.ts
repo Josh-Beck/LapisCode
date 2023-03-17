@@ -9,6 +9,9 @@ import { recurseObject } from './RecursiveService';
 var HCLParser = require("js-hcl-parser")
 
 
+//Global variable for use in recursive function
+let terraformObjectList: LambdaFunctionTerraform[] = [];
+
 // Takes in terraform HCL file and parses into valid JSON Object 
 export async function parseTerrformHCL(terraformNode: GithubNode): Promise<LambdaFunctionTerraform[]> {
     let terraformFile:GithubContentNode;
@@ -22,15 +25,14 @@ export async function parseTerrformHCL(terraformNode: GithubNode): Promise<Lambd
     // }
 
     let terraformJSON = HCLToJSON(terraformFile.content, true);
-    let terraformObjectList: LambdaFunctionTerraform[] = [];
     
-    terraformObjectList = recurseObject<LambdaFunctionTerraform>(
-        terraformJSON, returnCriteriaForTerraform, createTerraformObjects, terraformObjectList, 0);
+    recurseObject<LambdaFunctionTerraform>(
+        terraformJSON, returnCriteriaForTerraform, createTerraformObjects, 0);
 
     return terraformObjectList;
 }
 
-function createTerraformObjects(obj: any):LambdaFunctionTerraform {
+function createTerraformObjects(obj: any) {
     /*
         Terraform object format
         { aws_lambda_function: [ { func_name: [{OBJECT}] } ] }
@@ -39,7 +41,7 @@ function createTerraformObjects(obj: any):LambdaFunctionTerraform {
     let lambdaFunction: LambdaFunctionObject = obj.aws_lambda_function[0][lambdaFunctionName][0];
     let lambdaFunctionTerraform: LambdaFunctionTerraform = {name: lambdaFunctionName, lambdaObject: lambdaFunction}
 
-    return lambdaFunctionTerraform;
+    terraformObjectList.push(lambdaFunctionTerraform);
 }
 
 function returnCriteriaForTerraform(obj:any):Boolean {

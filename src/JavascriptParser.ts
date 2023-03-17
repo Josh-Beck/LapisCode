@@ -14,14 +14,16 @@ import { Function } from "./types/fileParsing/function/Function";
 import { ComparisionOperator, Conditional, LogicalOperator } from "./types/fileParsing/Conditional";
 import { Ident } from "./types/fileParsing/Ident";
 
+//Global variable for use in recursive function
+let parsedAndPreppedJSFile:FileNode[] = [];
+
 export async function handleJSFile(url: string):Promise<FileNode[]> {
     let jsFileContents:GithubContentNode = await getJSFile(url);
     //console.log(jsFileContents);
 
     let parsedJSFile:Object = await parseJSFile(jsFileContents);
     //console.log(parsedJSFile);
-    let parsedAndPreppedJSFile:FileNode[] = [];
-    parsedAndPreppedJSFile = recurseObject<FileNode>(parsedJSFile, returnCriteriaFunction, recursionBaseFunction, parsedAndPreppedJSFile, 0);
+    recurseObject<FileNode>(parsedJSFile, returnCriteriaFunction, recursionBaseFunction, 0);
     return parsedAndPreppedJSFile;
 }
 
@@ -60,7 +62,7 @@ export function returnCriteriaFunction(obj:any):Boolean {
     return Object.values(obj).some((val) => typeof val === 'string' ? FILE_NODE_PARSING.includes(val) : false);
 }
 
-export function recursionBaseFunction(obj:any):FileNode {
+export function recursionBaseFunction(obj:any) {
     //console.log("")
     //console.log(obj)
 
@@ -75,14 +77,16 @@ export function recursionBaseFunction(obj:any):FileNode {
                 if(obj.declarations[0].init && obj.declarations[0].init.type === JSConst.MEMBER_EXPR) {
                     defVar.init.push(valuesAndArgsHelper(obj.declarations[0].init));
                 } else if(obj.declarations[0].init) {
-                    //console.log("FUNCITON BASE")
+                    console.log("VARIABLE DECLARATION FUNCITON BASE")
                     //console.log(obj.declarations[0].init)
+                    //This no longer works due to the recursion change
                     let initFunc:Function = recursionBaseFunction(obj.declarations[0].init);
                     defVar.init.push([initFunc]);
                 }
 
                 // IF DECLARATION EQUALS CALLED FUNCTION - CALLED FUNCTION NAME AND MAP TO FUNCTION
                 
+                parsedAndPreppedJSFile.push(defVar);
                 return defVar;
             } 
             case JSConst.ARROW_FUNCTION:
@@ -106,15 +110,19 @@ export function recursionBaseFunction(obj:any):FileNode {
                 let defFunc: DefinedFunction = new DefinedFunction(name,obj.type,paramNames);
                 defFunc.super = superNames;
                 console.log(defFunc)
+                parsedAndPreppedJSFile.push(defFunc);
                 return defFunc;
             }
             case JSConst.CALL_EXPR: {
+                console.log("CALL ExpRESIONS")
+                console.log(obj)
                 let callee:FileNode[] = valuesAndArgsHelper(obj.callee)
                 let args:Array<Array<FileNode>> = []
 
                 for(let i:number = 0; i < obj.arguments.length; i++) {
+                    console.log(obj.arguments[i])
                     if(obj.arguments[i].type === JSConst.MEMBER_EXPR 
-                        || obj.arguments[i].type === JSConst.IDENTIFIER
+                        || obj.arguments[i].type === JSConst.IDENTIFIER 
                         || obj.arguments[i].type === JSConst.LITERAL) {
                         args.push(valuesAndArgsHelper(obj.arguments[i]))
                     } else {
@@ -130,6 +138,8 @@ export function recursionBaseFunction(obj:any):FileNode {
                 if(callee.length > 1) {
                     calledFunc.super = callee.slice(0,-1);
                 }
+                
+                parsedAndPreppedJSFile.push(calledFunc);
                 return calledFunc;
             }
             case JSConst.LITERAL: {
@@ -165,7 +175,7 @@ export function recursionBaseFunction(obj:any):FileNode {
                         cond.args.push(valuesAndArgsHelper(obj.test.argument));
                     }
                 }
-                return cond;
+                parsedAndPreppedJSFile.push(cond);
             }
             default: { 
             console.log("Missing Expression for: ");
