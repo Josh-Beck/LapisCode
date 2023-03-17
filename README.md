@@ -2,14 +2,15 @@
 
 ![GitHub](https://img.shields.io/github/license/Josh-Beck/LapisCode?color=green&style=for-the-badge)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Josh-Beck/LapisCode?style=for-the-badge)
+![GitHub last commit](https://img.shields.io/github/last-commit/Josh-Beck/LapisCode?logo=github&style=for-the-badge)
 
 
 Lapis Code is an API security library designed to parse Lambda API code and associated infrastructure and find common vulnerabilities.
 
 ### How to use
-Lapis code currently runs as a command line application, with direct file URLs required. Future development will include automated repository parsing to find relevant files and scan them accordingly.
+Lapis code currently runs as a command line application, with direct file URLs required. Future development will include automated repository parsing to find relevant files and scan them accordingly. Visit the ![documentation](https://github.com/Josh-Beck/LapisCode/tree/main/documentation) folder for more detailed information.
 
-In order to test it against the Lapis Code Test Repo, perform the following command.
+In order to get started with Lapis Code, use the following command test command:
 
 ```
 clear; ts; .\lapis.bat scan --handler "https://github.com/Josh-Beck/LapisCode-Test-Code/blob/main/js/handler.js" --url "https://github.com/Josh-Beck/LapisCode-Test-Code"
