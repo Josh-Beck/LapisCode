@@ -5,6 +5,9 @@ import { LambdaFunctionTerraform } from "./types/TerraformLambdaFunction";
 import { scan } from "./vulnerabilities/VulnerabilityService";
 import { handleJSFile } from "./parsers/JavascriptParser";
 import { FileNode } from "./types/fileParsing/FileNode";
+import { Result } from "./types/results/Result";
+import { handleResults } from "./reporting/Results";
+import { writeFile } from "./services/FileService";
 const { Command } = require('commander');
 
 (async (): Promise<void> => {
@@ -35,37 +38,11 @@ async function main(options: any) {
     let lambdaFunctionTerraformList: LambdaFunctionTerraform[] = await parseTerrformHCL(terrformNode);
     console.log(lambdaFunctionTerraformList);
 
+    //Create FileNode Objects from Javascript code
     let parsedAndPreppedJSFile:FileNode[] = await handleJSFile(options.handler);
-    //console.log("RESULTS")
-    //console.log(parsedAndPreppedJSFile)
-    var fs = require('fs');
-    await fs.writeFile ("./build/javascriptFileBuildResults.json", JSON.stringify(parsedAndPreppedJSFile), function(err:any) {
-        if (err) throw err;
-            console.log('complete');
-        }
-    );
-    console.log(parsedAndPreppedJSFile)
-    let finished:boolean = scan(parsedAndPreppedJSFile);
+    writeFile("./build/javascriptFileBuildResults.json", parsedAndPreppedJSFile);
 
-    //Handle finding/fetching python handler file
-    // let pythonFile:GithubNode = await getGithubFileFromWebsiteURL(options.handler);
-    // console.log(pythonFile)
-    
-    //Handle Parsing Python file.
-    //let parsedPythonFile:string[] = await getPythonFile(pythonFile);
-
-    //console.log(parsedPythonFile);
-
-    // Pull out file information
-    /*let todo:string = *///parsePythonFile(parsedPythonFile);
-
-
-    //Handle parsing vulnerability specifications
-
-
-    //Handle parsing files and vuln specs
-    //prepVulnerabilityData();
-    
-    //Report vulnerabilities
-
-    }
+    //Scan results for vulnerabilities
+    let resultList:Result[] = scan(parsedAndPreppedJSFile);
+    handleResults(resultList);
+}

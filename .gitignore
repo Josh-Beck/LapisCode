@@ -109,3 +109,6 @@ src/secrets/secrets.json
 
 #ignore vscode config
 .vscode
+
+#Results folder for output of scanner
+LapisResults/
