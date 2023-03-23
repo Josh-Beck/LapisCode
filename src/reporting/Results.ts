@@ -1,5 +1,6 @@
 import console from "console";
 import { createDir, writeFile } from "../services/FileService";
+import { FileNode } from "../types/fileParsing/FileNode";
 import { DefinedFunction } from "../types/fileParsing/function/DefinedFunction";
 import { Function } from "../types/fileParsing/function/Function";
 import { Result } from "../types/results/Result";
@@ -25,8 +26,8 @@ export function printResults(resultList:Result[]):void {
         console.log("Object type: " + resultList[i].target.type);
         if(resultList[i].target instanceof Function || resultList[i].target instanceof DefinedFunction) {
             console.log("One or more of these function parameters could be vulnerable: ");
-            (resultList[i].target as Function).parameterNames?.forEach((el) => {
-                console.log(el)
+            (resultList[i].target as Function).parameterNames?.forEach((el:FileNode[]) => {
+                console.log(el[0].name)
             });
         }
         console.log();

@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[BUG] <Version> <Bug Name> <Urgency (High, Med, Low)>"
+title: "[BUG] <Version> - <Bug Name> <Urgency (High, Med, Low)>"
 labels: ''
 assignees: ''
 
