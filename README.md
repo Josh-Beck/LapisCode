@@ -2,8 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/Josh-Beck/LapisCode?color=green&style=for-the-badge)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Josh-Beck/LapisCode?include_prereleases&style=for-the-badge)
-![GitHub last commit](https://img.shields.io/github/last-commit/Josh-Beck/LapisCode?logo=github&style=for-the-badge)
-
+![GitHub commits since latest release (by date) for a branch](https://img.shields.io/github/commits-since/Josh-Beck/LapisCode/latest/v1.0.0?logo=github%20&style=for-the-badge)
 
 Lapis Code is an API security library designed to parse Lambda API code and associated infrastructure and find common vulnerabilities.
 
