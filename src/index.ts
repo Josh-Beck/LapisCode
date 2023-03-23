@@ -44,5 +44,7 @@ async function main(options: any) {
 
     //Scan results for vulnerabilities
     let resultList:Result[] = scan(parsedAndPreppedJSFile);
+    
+    //Deliver results
     handleResults(resultList);
 }
