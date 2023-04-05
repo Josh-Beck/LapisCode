@@ -14,6 +14,7 @@ export const LITERAL:string = "Literal";
 export const IF_STATEMENT:string = "IfStatement";
 export const LOGICAL_EXPR:string = "LogicalExpression";
 export const UNARY_EXPR:string = "UnaryExpression";
+export const BINARY_EXPR:string = "BinaryExpression";
 
 //Helping expressions
 export const MEMBER_EXPR:string = "MemberExpression";

@@ -19,8 +19,7 @@ const { Command } = require('commander');
     .option('-u, --url <string>', 'Base Github URL. Defaults to configuration file URL.')
     .option('-t, --terraform <string>' , 'Terraform main.tf file URL.')
     .option('--handler <string>' , 'Lambda handler file URL.')
-    // https://github.com/Josh-Beck/LapisCode/issues/7
-    //.option('-a, --auth <string>', 'Python gateway authorizer file')
+    .option('-a, --auth <string>', 'Gateway authorizer file')
     .action((options: any) => {
         main(options);
     });
@@ -40,10 +39,16 @@ async function main(options: any) {
 
     //Create FileNode Objects from Javascript code
     let parsedAndPreppedJSFile:FileNode[] = await handleJSFile(options.handler);
-    writeFile("./build/javascriptFileBuildResults.json", parsedAndPreppedJSFile);
+    await writeFile("./build/javascriptFileBuildResults.json", parsedAndPreppedJSFile);
 
+    //Create FileNode Objects from Javascript code
+    let parsedAndPreppedAuthorizerFile:FileNode[] = await handleJSFile(options.auth);
+    await writeFile("./build/javascriptAuthorizerFileBuildResults.json", parsedAndPreppedAuthorizerFile);
+
+    let fileList:FileNode[][] = [];
+    fileList.push(parsedAndPreppedAuthorizerFile,parsedAndPreppedJSFile);
     //Scan results for vulnerabilities
-    let resultList:Result[] = scan(parsedAndPreppedJSFile);
+    let resultList:Result[] = scan(fileList);
     
     //Deliver results
     handleResults(resultList);

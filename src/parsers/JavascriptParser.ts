@@ -15,9 +15,10 @@ import { ComparisionOperator, Conditional, LogicalOperator } from "../types/file
 import { Ident } from "../types/fileParsing/Ident";
 
 //Global variable for use in recursive function
-let parsedAndPreppedJSFile:FileNode[] = [];
+let parsedAndPreppedJSFile:FileNode[];
 
 export async function handleJSFile(url: string):Promise<FileNode[]> {
+    parsedAndPreppedJSFile = [];
     let jsFileContents:GithubContentNode = await getJSFile(url);
     let parsedJSFile:Object = await parseJSFile(jsFileContents);
 
@@ -35,7 +36,20 @@ export async function getJSFile(url: string): Promise<GithubContentNode> {
 
 export async function parseJSFile(fileContentNode:GithubContentNode):Promise<Object> {
     let jsFile: string = decode(fileContentNode.content);
-    let parsedJSFile:Object = acorn.parse(jsFile, {ecmaVersion: 2020});
+    
+    let parsedJSFile:Object;
+
+    try {
+        parsedJSFile = acorn.parse(jsFile, {ecmaVersion: 2020});
+    } catch (exception:any) {
+        if (exception instanceof SyntaxError) {
+            parsedJSFile = acorn.parse(jsFile, {ecmaVersion: 2020, sourceType: "module"});
+        } else {
+            console.log(exception)
+            throw new Error("Error in Acorn parsing.");
+        }
+    }
+
     return parsedJSFile;
 }
 
@@ -133,8 +147,8 @@ export function recursionBaseFunction(obj:any) {
             case JSConst.IF_STATEMENT: {
                 let cond:Conditional = null as any;
 
-                if(obj.test && obj.test.type === JSConst.LOGICAL_EXPR) {
-                    cond = new Conditional(JSConst.LOGICAL_EXPR,JSConst.LOGICAL_EXPR);
+                if(obj.test && obj.test.type === JSConst.LOGICAL_EXPR || obj.test.type === JSConst.BINARY_EXPR) {
+                    cond = new Conditional(obj.test.type,obj.test.type);
                     if(obj.test.operator && Object.values(LogicalOperator).includes(obj.test.operator)) {
                         cond.logicalOperators.push(obj.test.operator);
                     } else if(obj.test.operator && Object.values(ComparisionOperator).includes(obj.test.operator)){
@@ -170,17 +184,17 @@ export function recursionBaseFunction(obj:any) {
 
 function valuesAndArgsHelper(obj:any):FileNode[]{
     let nodeArr:FileNode[] = [];
-    if(obj.type === JSConst.MEMBER_EXPR){
+    if(obj && obj.type === JSConst.MEMBER_EXPR){
         if(obj.object) {
             valuesAndArgsHelper(obj.object).map((a) => nodeArr.push(a));
         }
         if(obj.property){
             valuesAndArgsHelper(obj.property).map((a) => nodeArr.push(a));
         }
-    } else if(obj.type === JSConst.IDENTIFIER) {
+    } else if(obj && obj.type === JSConst.IDENTIFIER) {
         let ident:Ident = new Ident(memberExpressionHelper(obj).join('.'),JSConst.IDENTIFIER);
         nodeArr.push(ident)
-    } else if (obj.type === JSConst.LITERAL){
+    } else if (obj && obj.type === JSConst.LITERAL){
         nodeArr.push(recursionBaseFunction(obj))
     }
     return nodeArr;

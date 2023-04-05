@@ -12,6 +12,6 @@ Lapis code currently runs as a command line application, with direct file URLs r
 In order to get started with Lapis Code, use the following command test command:
 
 ```
-clear; ts; .\lapis.bat scan --handler "https://github.com/Josh-Beck/LapisCode-Test-Code/blob/main/js/handler.js" --url "https://github.com/Josh-Beck/LapisCode-Test-Code"
+clear; ts; .\lapis.bat scan --handler "https://github.com/Josh-Beck/LapisCode-Test-Code/blob/main/js/handler1.js" --url "https://github.com/Josh-Beck/LapisCode-Test-Code" --auth "https://github.com/Josh-Beck/LapisCode-Test-Code/blob/main/js/authorizers/auth1.js"
 ```
 

@@ -1,7 +1,7 @@
 var fs = require('fs');
 
-export function writeFile(path:string, obj:any):void {
-    fs.writeFile (
+export async function writeFile(path:string, obj:any):Promise<void> {
+    await fs.writeFile (
         path, 
         JSON.stringify(obj), 
         function(err:any) { if (err) throw err; }
