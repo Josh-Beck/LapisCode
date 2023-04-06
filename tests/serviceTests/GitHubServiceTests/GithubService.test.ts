@@ -15,7 +15,7 @@ describe('GitHub Service Tests', () => {
         
         expect(data.name).toBe("GithubFetchTest.md");
         expect(data.path).toBe('unitTests/GithubService/GithubFetchTest.md');
-    });
+    }, 15000); //Time-out of 15 seconds
 
     test('GitHub Org and Repo from URL ', () => {
         let result:string[] = GithubService.getGithubOrgAndRepoFromURL("https://github.com/Josh-Beck/LapisCode/tree/main");
@@ -29,5 +29,5 @@ describe('GitHub Service Tests', () => {
 
         expect(result.name).toBe("GithubURLTest.md");
         expect(result.type).toBe("file");
-    });
+    }, 15000); //Time-out of 15 seconds
 }); 
