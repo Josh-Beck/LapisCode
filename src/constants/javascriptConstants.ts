@@ -9,6 +9,7 @@ export const CALL_EXPR:string = "CallExpression";
 //Variable statements
 export const VAR_DECLARATION:string = "VariableDeclaration";
 export const LITERAL:string = "Literal";
+export const TEMPLATE_LITERAL:string = "TemplateLiteral";
 
 //If statements
 export const IF_STATEMENT:string = "IfStatement";
